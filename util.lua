@@ -123,7 +123,7 @@ end
 
 --- Checks if a table contains the arg.
 -- Variant of
--- ['includes()'](https://github.com/Yonaba/Moses/blob/master/moses.lua#L526-L541)
+-- ['include()'](https://github.com/Yonaba/Moses/blob/master/moses.lua#L526-L541)
 -- from [Yonaba/Moses](https://github.com/Yonaba/Moses).
 -- @tparam table t searched for the arg
 -- @param arg any item to be searched for
