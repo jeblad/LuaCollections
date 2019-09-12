@@ -1,4 +1,5 @@
---- Utils to support Expect.
+--- Utils to add a fe
+w table functions.
 -- @module util
 -- @author John Erling Blad < jeblad@gmail.com >
 
@@ -25,6 +26,7 @@ function util.count( t )
 end
 
 --- Size based on the raw table count, or vararg count.
+-- This is a slightly weird function, and is a bit spezialised for the moses lib.
 -- Variant of
 -- ['size()'](https://github.com/Yonaba/Moses/blob/master/moses.lua#L802-L813)
 -- ((doc)[http://yonaba.github.io/Moses/doc/#size])
@@ -139,6 +141,14 @@ function util.deepEqual( a, b, useMt )
 
 	return true
 end
+util.deepequal = util.deepEqual
+util.deep_equal = util.deepEqual
+util.deepCompare = util.deepEqual
+util.deepcompare = util.deepEqual
+util.deep_compare = util.deepEqual
+util.isEqual = util.deepEqual
+util.isequal = util.deepEqual
+util.is_equal = util.deepEqual
 
 --- Checks if a table include the arg.
 -- Simplified variant of
@@ -166,6 +176,8 @@ function util.include( t, arg )
 	end
 	return false
 end
+util.within = util.include
+util.contain = util.include
 util.contains = util.include
 
 -- return the export table
