@@ -1,5 +1,4 @@
---- Utils to add a fe
-w table functions.
+--- Utils to add a few table functions.
 -- @module util
 -- @author John Erling Blad < jeblad@gmail.com >
 
