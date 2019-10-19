@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace Collections;
+namespace LuaCollections;
 
 /**
- * Hook handlers for the Collections extension
+ * Hook handlers for the LuaCollections extension
  *
  * @ingroup Extensions
  */
