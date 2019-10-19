@@ -1,0 +1,33 @@
+{
+	"name": "Collections",
+	"version": "0.1.0",
+	"author": [
+		"John Erling Blad"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:Collections",
+	"descriptionmsg": "collections-desc",
+	"license-name": "GPL-2.0",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.33",
+		"extensions": {
+			"Scribunto": "*"
+		}
+	},
+	"AutoloadClasses": {
+		"Katsa\\Hooks":
+			"includes/Hooks.php"
+	},
+	"callback": "Collections\\Hooks::onExtensionSetup",
+	"Hooks": {
+		"ScribuntoExternalLibraryPaths": [
+			"Collections\\Hooks::onRegisterScribuntoExternalLibraryPaths"
+		]
+	},
+	"MessagesDirs": {
+		"Collections": [
+			"i18n"
+		]
+	},
+	"manifest_version": 2
+}
