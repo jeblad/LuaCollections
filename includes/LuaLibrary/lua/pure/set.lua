@@ -1,7 +1,8 @@
 --- Class for a set.
 -- This is an open structure, to make it easilly extensible.
 -- That is, the queue can be abused by manipulating it as an ordinary table.
--- Items can be added to a set, but not removed.
+-- Items can be added to the set, but not removed.
+-- @see https://en.wikipedia.org/wiki/Set_(abstract_data_type)
 -- @module set
 
 -- pure libs
