@@ -1,5 +1,5 @@
 {
-	"name": "jeblad/collections",
+	"name": "jeblad/LuaCollections",
 	"type": "mediawiki-extension",
 	"description": "Provides basic collections and a few utilities for modules in Mediawiki.",
 	"keywords": [
@@ -12,7 +12,7 @@
 		"stack",
 		"queue"
 	],
-	"homepage": "https://www.mediawiki.org/wiki/Extension:Collections",
+	"homepage": "https://www.mediawiki.org/wiki/Extension:LuaCollections",
 	"license": "GPL-2.0",
 	"authors": [
 		{
@@ -22,8 +22,8 @@
 		}
 	],
 	"support": {
-		"wiki": "https://www.mediawiki.org/wiki/Extension:Collections",
-		"forum": "https://www.mediawiki.org/wiki/Extension_talk:Collections",
+		"wiki": "https://www.mediawiki.org/wiki/Extension:LuaCollections",
+		"forum": "https://www.mediawiki.org/wiki/Extension_talk:LuaCollections",
 		"source": "https://git.wikimedia.org/tree/mediawiki%2Fextensions%2Collections",
 		"issues": "https://phabricator.wikimedia.org/project/view/2053/",
 		"irc": "irc://irc.freenode.org/mediawiki"
@@ -58,10 +58,10 @@
 			"find modules/images -type d -path minified -prune -o -type d -execdir svgo --pretty --indent=2 -i . -o ./minified \\;"
 		],
 		"unit": [
-			"php ../../tests/phpunit/phpunit.php --wiki wiki --exclude-group LuaStandalone,Broken,Destructive,Database,Stub --group Collections"
+			"php ../../tests/phpunit/phpunit.php --wiki wiki --exclude-group LuaStandalone,Broken,Destructive,Database,Stub --group LuaCollections"
 		],
 		"unit-both": [
-			"php ../../tests/phpunit/phpunit.php --wiki wiki --exclude-group Broken,Destructive,Database,Stub --group Collections"
+			"php ../../tests/phpunit/phpunit.php --wiki wiki --exclude-group Broken,Destructive,Database,Stub --group LuaCollections"
 		],
 		"unit-lua": [
 			"php ../../tests/phpunit/phpunit.php --wiki wiki --exclude-group Broken,Destructive,Database,Stub --group Lua"
