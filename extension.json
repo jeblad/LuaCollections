@@ -1,10 +1,10 @@
 {
-	"name": "Collections",
+	"name": "LuaCollections",
 	"version": "0.1.0",
 	"author": [
 		"John Erling Blad"
 	],
-	"url": "https://www.mediawiki.org/wiki/Extension:Collections",
+	"url": "https://www.mediawiki.org/wiki/Extension:LuaCollections",
 	"descriptionmsg": "collections-desc",
 	"license-name": "GPL-2.0",
 	"type": "other",
@@ -18,14 +18,14 @@
 		"Katsa\\Hooks":
 			"includes/Hooks.php"
 	},
-	"callback": "Collections\\Hooks::onExtensionSetup",
+	"callback": "LuaCollections\\Hooks::onExtensionSetup",
 	"Hooks": {
 		"ScribuntoExternalLibraryPaths": [
-			"Collections\\Hooks::onRegisterScribuntoExternalLibraryPaths"
+			"LuaCollections\\Hooks::onRegisterScribuntoExternalLibraryPaths"
 		]
 	},
 	"MessagesDirs": {
-		"Collections": [
+		"LuaCollections": [
 			"i18n"
 		]
 	},
