@@ -1,0 +1,6 @@
+.*.swp
+*~
+/.project
+/composer.lock
+/package-lock.json
+/vendor
