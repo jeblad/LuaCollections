@@ -1,6 +1,6 @@
-project = 'Collections'
-title = 'Collections documentation'
-description = 'Collections for Lua embedded within Mediawiki.'
+project = 'LuaCollections'
+title = 'LuaCollections documentation'
+description = 'Collections for Lua code embedded within Mediawiki.'
 use_markdown_titles = true
 format = 'markdown'
 dir = 'docs'
