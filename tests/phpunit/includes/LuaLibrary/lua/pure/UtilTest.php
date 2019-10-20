@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace Expect\Test;
+namespace LuaCollections\Test;
 
 use Scribunto_LuaEngineTestBase;
 
 /**
- * @group Expect
+ * @group LuaCollections
  *
  * @license GPL-2.0-or-later
  *

@@ -4,27 +4,22 @@
 
 local testframework = require 'Module:TestFramework'
 
-local expUtil = require '_expect.util'
-assert( expUtil )
+local util = require 'collectionUtil'
+assert( util )
 
 local function testExists()
-	return type( expUtil )
+	return type( util )
 end
 
-local function testCount( ... )
-	return expUtil.count( ... )
-end
-
-local function testSize( ... )
-	return expUtil.size( ... )
-end
-
-local function testDeepEqual( ... )
-	return expUtil.deepEqual( ... )
-end
-
-local function testContains( ... )
-	return expUtil.contains( ... )
+local function testFunction( name, ... )
+	local results = {}
+	for i,v in ipairs{ ... } do
+		results[i] = { pcall( function( ... ) return util[name]( ... ) end, unpack( v ) ) }
+		if not results[i][1] then
+			results[i][2] = type(results[i][2])
+		end
+	end
+	return unpack( results )
 end
 
 local tests = {
@@ -35,76 +30,76 @@ local tests = {
 		expect = { 'table' }
 	},
 	{
-		name = 'Calling function "count" without any argument',
-		func = testCount,
-		args = { {} },
-		expect = { 0 }
+		name = 'Count',
+		func = testFunction,
+		args = { 'count',
+			{ nil },
+			{ {} },
+			{ { 'a' } },
+			{ { 'a', { 'b', 'c' } } },
+			{ { 'a', 'b', 'c' } },
+		},
+		expect = {
+			{ true, nil },
+			{ true, 0 },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
+		}
 	},
 	{
-		name = 'Calling function "count" with single string argument',
-		func = testCount,
-		args = { { 'a' } },
-		expect = { 1 }
+		name = 'Size',
+		func = testFunction,
+		args = { 'size',
+			{ nil },
+			{ {} },
+			{ { 'a' } },
+			{ { 'a', { 'b', 'c' } } },
+			{ { 'a', 'b', 'c' } },
+		},
+		expect = {
+			{ true, 0 },
+			{ true, 0 },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
+		}
 	},
 	{
-		name = 'Calling function "count" with composite table argument',
-		func = testCount,
-		args = { { 'a', { 'b', 'c' } } },
-		expect = { 2 }
+		name = 'Deep equal',
+		func = testFunction,
+		args = { 'deepEqual',
+			{ { 'a', { 'b' }, 'c' }, { 'a', 'b', 'c' } },
+			{ { 'a', { 'b' }, 'c' }, { 'a', { 'b' }, 'c' } },
+			{ { 'a', { ['foo'] = 'b' }, 'c' }, { 'a', { ['bar'] = 'b' }, 'c' } },
+			{ { 'a', { ['foo'] = 'b' }, 'c' }, { 'a', { ['foo'] = 'b' }, 'c' } },
+		},
+		expect = {
+			{ true, false },
+			{ true, true },
+			{ true, false },
+			{ true, true },
+		}
 	},
 	{
-		name = 'Calling function "count" with multiple string arguments',
-		func = testCount,
-		args = { { 'a', 'b', 'c' } },
-		expect = { 3 }
-	},
-	{
-		name = 'Calling function "size" without any argument',
-		func = testSize,
-		args = { nil },
-		expect = { 0 }
-	},
-	{
-		name = 'Calling function "size" with single string argument',
-		func = testSize,
-		args = { { 'a' } },
-		expect = { 1 }
-	},
-	{
-		name = 'Calling function "size" with multiple string arguments',
-		func = testSize,
-		args = { { 'a', 'b', 'c' } },
-		expect = { 3 }
-	},
-	{
-		name = 'Calling function "deepEqual" with two dissimilar table arguments',
-		func = testDeepEqual,
-		args = { { 'a', { 'b' }, 'c' }, { 'a', 'b', 'c' } },
-		expect = { false }
-	},
-	{
-		name = 'Calling function "deepEqual" with two similar table arguments',
-		func = testDeepEqual,
-		args = { { 'a', { 'b' }, 'c' }, { 'a', { 'b' }, 'c' } },
-		expect = { true }
-	},
-	{
-		name = 'Calling function "contains" with last table argument missing from first',
-		func = testContains,
-		args = { { 'a', { 'b' }, 'c' }, { 'a' } },
-		expect = { false }
-	},
-	{
-		name = 'Calling function "contains" with last table argument within first',
-		func = testContains,
-		args = { { 'a', { 'b' }, 'c' }, 'c' },
-		expect = { 3 }
-	},
-	{
-		name = 'Calling function "contains" with last table argument within first',
-		func = testContains,
-		args = { { 'a', { 'b' }, 'c' }, { 'b' } },
-		expect = { 2 }
+		name = 'Contains',
+		func = testFunction,
+		args = { 'contains',
+			{ { 'a', { 'b' }, 'c' }, { 'a' } },
+			{ { 'a', { 'b' }, 'c' }, 'a' },
+			{ { 'a', { 'b' }, 'c' }, { 'b' } },
+			{ { 'a', { 'b' }, 'c' }, 'c' },
+			{ { 'a', { ['foo'] = 'b' }, 'c' }, { ['bar'] = 'b' } },
+			{ { 'a', { ['foo'] = 'b' }, 'c' }, { ['foo'] = 'b' } },
+		},
+		expect = {
+			{ true, false },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
+			{ true, false },
+			{ true, 2 },
+		}
 	},
 }
 
