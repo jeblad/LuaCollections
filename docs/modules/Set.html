@@ -38,9 +38,9 @@
 
 <h2>Modules</h2>
 <ul class="nowrap">
-  <li><strong>Bag</strong></li>
+  <li><a href="../modules/Bag.html">Bag</a></li>
   <li><a href="../modules/Queue.html">Queue</a></li>
-  <li><a href="../modules/Set.html">Set</a></li>
+  <li><strong>Set</strong></li>
   <li><a href="../modules/Stack.html">Stack</a></li>
   <li><a href="../modules/util.html">util</a></li>
 </ul>
@@ -59,35 +59,35 @@
 
 <div id="content">
 
-<h1>Module <code>Bag</code></h1>
-<p>Class for a bag.</p>
+<h1>Module <code>Set</code></h1>
+<p>Class for a set.</p>
 <p> This is an open structure, to make it easilly extensible.
  That is, the queue can be abused by manipulating it as an ordinary table.
- Items can be added to a bag, but not removed.
- See also Wikipedias page on <a href="https://en.wikipedia.org/wiki/Set_(abstract_data_type">multiset</a>.</p>
+ Items can be added to the set, but not removed.
+ See also Wikipedias page on <a href="https://en.wikipedia.org/wiki/Set_(abstract_data_type">set</a>.</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name nowrap"><a href="#bag.new">bag.new ()</a></td>
+	<td class="name nowrap"><a href="#set.new">set.new ()</a></td>
 	<td class="summary">Create a new instance.</td>
 	</tr>
 	<tr>
-	<td class="name nowrap"><a href="#bag:add">bag:add ()</a></td>
-	<td class="summary">Add an item to the bag.</td>
+	<td class="name nowrap"><a href="#set:add">set:add ()</a></td>
+	<td class="summary">Add an item to the set.</td>
 	</tr>
 	<tr>
-	<td class="name nowrap"><a href="#bag:find">bag:find ()</a></td>
-	<td class="summary">Find an item in the bag.</td>
+	<td class="name nowrap"><a href="#set:find">set:find ()</a></td>
+	<td class="summary">Find an item in the set.</td>
 	</tr>
 	<tr>
-	<td class="name nowrap"><a href="#bag:isEmpty">bag:isEmpty ()</a></td>
-	<td class="summary">Is the bag empty.</td>
+	<td class="name nowrap"><a href="#set:isEmpty">set:isEmpty ()</a></td>
+	<td class="summary">Is the set empty.</td>
 	</tr>
 	<tr>
-	<td class="name nowrap"><a href="#bag:count">bag:count ()</a></td>
-	<td class="summary">Count number of entries in bag.</td>
+	<td class="name nowrap"><a href="#set:count">set:count ()</a></td>
+	<td class="summary">Count number of entries in set.</td>
 	</tr>
 </table>
 
@@ -99,8 +99,8 @@
 
     <dl class="function">
     <dt>
-    <a name = "bag.new"></a>
-    <strong>bag.new ()</strong>
+    <a name = "set.new"></a>
+    <strong>set.new ()</strong>
     </dt>
     <dd>
     Create a new instance.
@@ -126,13 +126,17 @@
 
 </dd>
     <dt>
-    <a name = "bag:add"></a>
-    <strong>bag:add ()</strong>
+    <a name = "set:add"></a>
+    <strong>set:add ()</strong>
     </dt>
     <dd>
-    Add an item to the bag.
+    Add an item to the set.
  This method can be called as a function.
 
+    <h3>Nicknames:</h3>
+    <ul>
+         inject
+    </ul "@todo">
 
     <h3>Parameters:</h3>
     <ul>
@@ -156,13 +160,11 @@
 
 </dd>
     <dt>
-    <a name = "bag:find"></a>
-    <strong>bag:find ()</strong>
+    <a name = "set:find"></a>
+    <strong>set:find ()</strong>
     </dt>
     <dd>
-    Find an item in the bag.
- There might be several items.
- Equality is shallow.
+    Find an item in the set.
  This method can be called as a function.
 
     <h3>Nicknames:</h3>
@@ -192,12 +194,12 @@
 
 </dd>
     <dt>
-    <a name = "bag:isEmpty"></a>
-    <strong>bag:isEmpty ()</strong>
+    <a name = "set:isEmpty"></a>
+    <strong>set:isEmpty ()</strong>
     </dt>
     <dd>
-    Is the bag empty.
- Checks by counting items whether bag is empty.
+    Is the set empty.
+ Checks by counting items whether set is empty.
  This method can be called as a function.
 
 
@@ -214,11 +216,11 @@
 
 </dd>
     <dt>
-    <a name = "bag:count"></a>
-    <strong>bag:count ()</strong>
+    <a name = "set:count"></a>
+    <strong>set:count ()</strong>
     </dt>
     <dd>
-    Count number of entries in bag.
+    Count number of entries in set.
  This method can be called as a function.
 
 
