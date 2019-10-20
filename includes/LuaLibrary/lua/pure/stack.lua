@@ -2,7 +2,7 @@
 -- This is an open structure, to make it easilly extensible.
 -- That is, the stack can be abused by manipulating it as an ordinary table.
 -- Items can be added to one end of a queue, and later removed from the same end.
--- @see https://en.wikipedia.org/wiki/Stack_(abstract_data_type)
+-- See also Wikipedias page on [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)).
 -- @module stack
 
 -- pure libs
