@@ -15,7 +15,7 @@
 		}
 	},
 	"AutoloadClasses": {
-		"Katsa\\Hooks":
+		"LuaCollections\\Hooks":
 			"includes/Hooks.php"
 	},
 	"callback": "LuaCollections\\Hooks::onExtensionSetup",
