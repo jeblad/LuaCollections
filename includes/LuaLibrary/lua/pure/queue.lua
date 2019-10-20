@@ -3,7 +3,7 @@
 -- That is, the queue can be abused by manipulating it as an ordinary table.
 -- Items can be added to one end of a queue, and later removed from the opposite end.
 -- See also Wikipedias page on [queue](https://en.wikipedia.org/wiki/Queue_(abstract_data_type)).
--- @module queue
+-- @module Queue
 
 -- pure libs
 local util = require 'tableUtil'

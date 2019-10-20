@@ -3,7 +3,7 @@
 -- That is, the queue can be abused by manipulating it as an ordinary table.
 -- Items can be added to the set, but not removed.
 -- See also Wikipedias page on [set](https://en.wikipedia.org/wiki/Set_(abstract_data_type)).
--- @module set
+-- @module Set
 
 -- pure libs
 local util = require 'tableUtil'
