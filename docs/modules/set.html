@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>LuaCollections documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>LuaCollections</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bag.html">Bag</a></li>
+  <li><a href="../modules/queue.html">queue</a></li>
+  <li><strong>set</strong></li>
+  <li><a href="../modules/stack.html">stack</a></li>
+  <li><a href="../modules/util.html">util</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/introduction.md.html">Introduction</a></li>
+  <li><a href="../topics/vagrant.md.html">Vagrant</a></li>
+  <li><a href="../topics/vscode.md.html">VScode</a></li>
+  <li><a href="../topics/CONTRIBUTING.md.html">Contributing</a></li>
+  <li><a href="../topics/CODE_OF_CONDUCT.md.html">Code of Conduct</a></li>
+  <li><a href="../topics/SECURITY.md.html">Security</a></li>
+  <li><a href="../topics/TRANSLATING.md.html">Translating</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>set</code></h1>
+<p>Class for a set.</p>
+<p> This is an open structure, to make it easilly extensible.
+ That is, the queue can be abused by manipulating it as an ordinary table.
+ Items can be added to the set, but not removed.
+ See also Wikipedias page on <a href="https://en.wikipedia.org/wiki/Set_(abstract_data_type">set</a>.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name nowrap"><a href="#new">new ()</a></td>
+	<td class="summary">Create a new instance.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#add">add ()</a></td>
+	<td class="summary">Add an item to the set.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#find">find ()</a></td>
+	<td class="summary">Find an item in the set.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#isEmpty">isEmpty ()</a></td>
+	<td class="summary">Is the set empty.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#count">count ()</a></td>
+	<td class="summary">Count number of entries in set.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new ()</strong>
+    </dt>
+    <dd>
+    Create a new instance.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">vararg</span></span>
+         arguments to be passed on
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">self</span></span>
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "add"></a>
+    <strong>add ()</strong>
+    </dt>
+    <dd>
+    Add an item to the set.
+ This method can be called as a function.
+
+    <h3>Nicknames:</h3>
+    <ul>
+         inject
+    </ul "@todo">
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">item</span>
+            <span class="types"><span class="type">any</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">self</span></span>
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "find"></a>
+    <strong>find ()</strong>
+    </dt>
+    <dd>
+    Find an item in the set.
+ This method can be called as a function.
+
+    <h3>Nicknames:</h3>
+    <ul>
+         has
+    </ul "@todo">
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">item</span>
+            <span class="types"><span class="type">any</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">any</span></span>
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isEmpty"></a>
+    <strong>isEmpty ()</strong>
+    </dt>
+    <dd>
+    Is the set empty.
+ Checks by counting items whether set is empty.
+ This method can be called as a function.
+
+
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">boolean</span></span>
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "count"></a>
+    <strong>count ()</strong>
+    </dt>
+    <dd>
+    Count number of entries in set.
+ This method can be called as a function.
+
+
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">number</span></span>
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc TESTING</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
+

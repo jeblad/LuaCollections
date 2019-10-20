@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>LuaCollections documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>LuaCollections</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Minimal_setup">Minimal setup </a></li>
+<li><a href="#Extended_setup">Extended setup </a></li>
+<li><a href="#Import_of_pages">Import of pages </a></li>
+<li><a href="#Resource_allocations">Resource allocations </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/introduction.md.html">Introduction</a></li>
+  <li><strong>Vagrant</strong></li>
+  <li><a href="../topics/vscode.md.html">VScode</a></li>
+  <li><a href="../topics/CONTRIBUTING.md.html">Contributing</a></li>
+  <li><a href="../topics/CODE_OF_CONDUCT.md.html">Code of Conduct</a></li>
+  <li><a href="../topics/SECURITY.md.html">Security</a></li>
+  <li><a href="../topics/TRANSLATING.md.html">Translating</a></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bag.html">Bag</a></li>
+  <li><a href="../modules/queue.html">queue</a></li>
+  <li><a href="../modules/set.html">set</a></li>
+  <li><a href="../modules/stack.html">stack</a></li>
+  <li><a href="../modules/util.html">util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>Vagrant</h1>
+
+<p><a name="Minimal_setup"></a></p>
+<h2>Minimal setup</h2>
+
+<p>This extension uses <a href="https://www.mediawiki.org/wiki/MediaWiki-Vagrant">Mediawiki-Vagrant</a>, and a complete setup can be made quite easily.</p>
+
+<ol>
+    <li>Make sure you have Vagrant, etc, prepare a development directory, and move to that directory.</li>
+    <li>Clone Mediawiki</li>
+</ol>
+
+
+<pre>
+git clone <span class="comment">--recursive https://gerrit.wikimedia.org/r/mediawiki/vagrant .</span>
+</pre>
+
+<p>3. Add role unless <a href="https://gerrit.wikimedia.org/r/#/c/mediawiki/vagrant/+/544324/">#544324</a> has been merged. (You need <a href="https://www.mediawiki.org/wiki/Gerrit/git-review">git-review</a> to do this.)</p>
+
+
+<pre>
+git review -d <span class="number">544324</span>
+</pre>
+
+<p>3. Run setup.</p>
+
+
+<pre>
+./setup.sh
+</pre>
+
+<p>4. Enable the role for LuaCollections. This pulls inn the role for Scribunto, which pulls in additional roles.</p>
+
+
+<pre>
+vagrant roles enable LuaCollections
+</pre>
+
+<p>5. Start the instance.</p>
+
+
+<pre>
+vagrant up
+</pre>
+
+<p>6. Done.</p>
+
+<p>This should create a working environment with <code>phpmd</code>, <code>phpcs</code>, and <code>phpunit</code>. An actual call would be <code>composer unit</code>. See <code>scripts</code> in <a href="https://github.com/jeblad/LuaCollections/blob/master/composer.json">composer.json</a> for all calls.</p>
+
+<p><a name="Extended_setup"></a></p>
+<h2>Extended setup</h2>
+
+<h3>Luarocks and ldoc</h3>
+
+<p>It is necessary to install <code>luarocks</code> and a few libs to recreate the generated docs.</p>
+
+<ol>
+    <li>Install luarocks. This will pull in several additional packages, the most important is lua5.1.</li>
+</ol>
+
+
+<pre>
+sudo apt install luarocks
+</pre>
+
+<p>2. Install ldoc. This will pull in several additional packages, like penlight, markdown, and luafilesystem.</p>
+
+
+<pre>
+sudo luarocks install ldoc
+</pre>
+
+<p>3. Done.</p>
+
+<p>This should make a working <code>ldoc</code>. An actual call would be <code>composer ldoc</code>.</p>
+
+<p><a name="Import_of_pages"></a></p>
+<h2>Import of pages</h2>
+
+<p>A few pages for testing can be imported in the new instance.</p>
+
+<ol>
+    <li>Open a terminal at the new Vagrant instance</li>
+</ol>
+
+
+<pre>
+vagrant ssh
+</pre>
+
+<p>2. Go to the LuaCollections folder and import the pages.</p>
+
+
+<pre>
+cd /vagrant/mediawiki/extensions/LuaCollections
+composer import
+</pre>
+
+<p>3. Go to the mediawiki root, rebuild recent changes, and rebuild site stats.</p>
+
+
+<pre>
+cd /vagrant/mediawiki
+php maintenance/rebuildrecentchanges.php
+php maintenance/initSiteStats.php <span class="comment">--update</span>
+</pre>
+
+<p>4. Done</p>
+
+<p><a name="Resource_allocations"></a></p>
+<h2>Resource allocations</h2>
+
+<h3>Vagrant resources</h3>
+
+<p>It could be interesting to adjust the amount of memory and number of CPU cores used during testing. Such resource allocations are described on <a href="https://www.mediawiki.org/wiki/MediaWiki-Vagrant#Adjust_CPU">mw:MediaWiki-Vagrant#Adjust the resources allocated to the VM?</a> Especially note the code snippet for <code>~/picklespace/Vagrantfile-extra.rb</code>.</p>
+
+
+<pre>
+Vagrant.configure(<span class="string">'2'</span>) <span class="keyword">do</span> |config|
+  config.vm.provider :virtualbox <span class="keyword">do</span> |vb|
+    # See http://www.virtualbox.org/manual/ch08.html <span class="keyword">for</span> additional options.
+    vb.customize [<span class="string">'modifyvm'</span>, :id, <span class="string">'--memory'</span>, <span class="string">'1536'</span>]
+    vb.customize [<span class="string">'modifyvm'</span>, :id, <span class="string">'--cpus'</span>, <span class="string">'2'</span>]
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+
+
+<p>To restart the instance do <code>vagrant reload</code>.</p>
+
+<p>If the memory is too low, then the test run in guest will end in a <em>fork failed</em>. When that happen, increase the memory until the test runs ok. With <em>fastest</em> it should be sufficient to set this around “1024”, and “1536” is enough. If it is set to high, then it seems like the test runs take more time. This could be due to garbage collection.</p>
+
+<p>If the number of CPUs are increased beyond the actual number of cores, an increase in run time might be observed. When that happen, decrease the number of CPUs available to the vagrant instance.</p>
+
+<h3>Composer resources</h3>
+
+<p>There can be timeouts in the Vagrant guest instance during composer runs. To adjust for the increased time do something like</p>
+
+
+<pre>
+vagrant ssh
+composer config <span class="comment">--global process-timeout 900</span>
+</pre>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc TESTING</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
+

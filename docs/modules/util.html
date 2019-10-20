@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>LuaCollections documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>LuaCollections</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bag.html">Bag</a></li>
+  <li><a href="../modules/queue.html">queue</a></li>
+  <li><a href="../modules/set.html">set</a></li>
+  <li><a href="../modules/stack.html">stack</a></li>
+  <li><strong>util</strong></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/introduction.md.html">Introduction</a></li>
+  <li><a href="../topics/vagrant.md.html">Vagrant</a></li>
+  <li><a href="../topics/vscode.md.html">VScode</a></li>
+  <li><a href="../topics/CONTRIBUTING.md.html">Contributing</a></li>
+  <li><a href="../topics/CODE_OF_CONDUCT.md.html">Code of Conduct</a></li>
+  <li><a href="../topics/SECURITY.md.html">Security</a></li>
+  <li><a href="../topics/TRANSLATING.md.html">Translating</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>util</code></h1>
+<p>Utils to add a few table functions.</p>
+<p>
+
+</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: John Erling Blad &lt; jeblad@gmail.com ></li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name nowrap"><a href="#count">count ()</a></td>
+	<td class="summary">Raw table count of all the items.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#size">size ()</a></td>
+	<td class="summary">Size based on the raw table count, or vararg count.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#deepEqual">deepEqual ()</a></td>
+	<td class="summary">Deep equal of two objects.</td>
+	</tr>
+	<tr>
+	<td class="name nowrap"><a href="#include">include ()</a></td>
+	<td class="summary">Checks if a table include the arg.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "count"></a>
+    <strong>count ()</strong>
+    </dt>
+    <dd>
+    Raw table count of all the items.
+ Simplified variant of
+ <a href="https://github.com/Yonaba/Moses/blob/master/moses.lua#L308-L322">'count()'</a>
+ (<a href="http://yonaba.github.io/Moses/doc/#count">doc</a>)
+ from <a href="http://yonaba.github.io/Moses/">Yonaba: Moses</a>.
+ Approximation of
+ <a href="https://github.com/jashkenas/underscore/blob/master/underscore.js#L481-L485">'size()'</a>
+ ((doc)(https://underscorejs.org/#size))
+ from <a href="https://underscorejs.org/">jashkenas: Underscore.js</a>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         has its entries counted
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">number</span></span>
+        raw entries
+
+
+
+
+</dd>
+    <dt>
+    <a name = "size"></a>
+    <strong>size ()</strong>
+    </dt>
+    <dd>
+    Size based on the raw table count, or vararg count.
+ This is a slightly weird function, and is a bit spezialised for the moses lib.
+ Variant of
+ <a href="https://github.com/Yonaba/Moses/blob/master/moses.lua#L802-L813">'size()'</a>
+ ((doc)[http://yonaba.github.io/Moses/doc/#size])
+ from <a href="http://yonaba.github.io/Moses/">Yonaba: Moses</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">count</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a> or <span class="type">any</span></span>
+         entries if table, count varargs otherwise
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">number</span></span>
+        counted entries
+
+
+
+
+</dd>
+    <dt>
+    <a name = "deepEqual"></a>
+    <strong>deepEqual ()</strong>
+    </dt>
+    <dd>
+    Deep equal of two objects.
+ Simplified variant of
+ <a href="https://github.com/Yonaba/Moses/blob/master/moses.lua#L2775-L2815">'isEqual()'</a>
+ ((doc)[http://yonaba.github.io/Moses/doc/#isEqual])
+ from <a href="http://yonaba.github.io/Moses/">Yonaba: Moses</a>.
+ Variant of
+ <a href="https://github.com/mirven/underscore.lua/blob/master/lib/underscore.lua#L328-L352">'is<em>equal()'</a>
+ ((doc)[https://mirven.github.io/underscore.lua/#is</em>equal])
+ from <a href="https://mirven.github.io/underscore.lua/">mirven: Underscore.lua</a>.
+ Approximation of
+ <a href="https://github.com/jashkenas/underscore/blob/master/underscore.js#L1295-L1298">'isEqual()'</a>
+ ((doc)(https://underscorejs.org/#isEqual))
+ from <a href="https://underscorejs.org/">jashkenas: Underscore.js</a>
+ Variant of
+ <a href="https://github.com/stevedonovan/Penlight/blob/master/lua/pl/tablex.lua#L154-L64">'deepcompare()'</a>
+ ((doc)[http://stevedonovan.github.io/Penlight/api/libraries/pl.tablex.html#deepcompare])
+ from <a href="http://stevedonovan.github.io/Penlight/api/libraries/pl.tablex.html">Penlight: pl.tablex.lua</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+         any type of object
+        </li>
+        <li><span class="parameter">b</span>
+         any type of object
+        </li>
+        <li><span class="parameter">useMt</span>
+            <span class="types"><span class="type">boolean</span></span>
+         indicator for whether to include the meta table
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">boolean</span></span>
+        result of comparison
+
+
+
+
+</dd>
+    <dt>
+    <a name = "include"></a>
+    <strong>include ()</strong>
+    </dt>
+    <dd>
+    Checks if a table include the arg.
+ Simplified variant of
+ <a href="https://github.com/Yonaba/Moses/blob/master/moses.lua#L526-L541">'include()'</a>
+ ((doc)[http://yonaba.github.io/Moses/doc/#include])
+ from <a href="http://yonaba.github.io/Moses/">Yonaba: Moses</a>.
+ Simplified variant (defunc) of
+ <a href="https://github.com/mirven/underscore.lua/blob/master/lib/underscore.lua#L150-L155">'include()'</a>
+ ((doc)[https://mirven.github.io/underscore.lua/#include])
+ from <a href="https://mirven.github.io/underscore.lua/">mirven: Underscore.lua</a>.
+ Approximation of
+ <a href="https://github.com/jashkenas/underscore/blob/master/underscore.js#L291-L297">'contains()'</a>
+ ((doc)(https://underscorejs.org/#contains))
+ from <a href="https://underscorejs.org/">jashkenas: Underscore.js</a>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         searched for the arg
+        </li>
+        <li><span class="parameter">arg</span>
+         any item to be searched for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+
+           <span class="types"><span class="type">boolean</span></span>
+        result of the operation
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc TESTING</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
+
