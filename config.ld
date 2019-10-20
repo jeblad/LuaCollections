@@ -22,9 +22,11 @@ readme = {
 	'TRANSLATING.md'
 }
 
+--[[
 examples = {
 	'examples'
 }
+]]
 
 -- new_type( 'macro', 'Macros' )
 custom_tags = {
