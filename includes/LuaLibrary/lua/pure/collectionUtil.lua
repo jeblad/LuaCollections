@@ -15,8 +15,11 @@ local util = {}
 -- ((doc)(https://underscorejs.org/#size))
 -- from [jashkenas: Underscore.js](https://underscorejs.org/)
 -- @tparam table t has its entries counted
--- @treturn number raw entries
+-- @treturn nil|number raw entries, nil on no arg
 function util.count( t )
+	if not t then
+		return nil
+	end
 	local i = 0
 	for _,_ in pairs( t ) do
 		i = i + 1
