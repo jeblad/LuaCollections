@@ -6,7 +6,7 @@
 -- @module Stack
 
 -- pure libs
-local util = require 'tableUtil'
+--local util = require 'tableUtil'
 
 -- @var metatable for stacks
 local stack = {}
@@ -29,10 +29,10 @@ end
 --- Push an item on the stack.
 -- This method can be called as a function.
 -- @function stack:push
--- @tparam any item
+-- @tparam vararg ...
 -- @treturn self
-function stack:push( item )
-	table.insert( self, item )
+function stack:push( ... )
+	table.insert( self, { ... } )
 	return self
 end
 
@@ -40,9 +40,9 @@ end
 -- This method can be called as a function.
 -- @function stack:pop
 -- @nick drop
--- @treturn any
+-- @treturn varag
 function stack:pop()
-	return table.remove( self )
+	return unpack( table.remove( self ) )
 end
 stack.drop = stack.pop
 
