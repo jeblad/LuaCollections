@@ -1,5 +1,5 @@
 {
-	"name": "jeblad/LuaCollections",
+	"name": "jeblad/lua-collections",
 	"type": "mediawiki-extension",
 	"description": "Provides basic collections and a few utilities for modules in Mediawiki.",
 	"keywords": [
