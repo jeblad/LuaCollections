@@ -6,7 +6,7 @@
 -- @module Queue
 
 -- pure libs
-local util = require 'tableUtil'
+--local util = require 'tableUtil'
 
 -- @var metatable for queues
 local queue = {}
@@ -30,10 +30,10 @@ end
 -- This method can be called as a function.
 -- @function queue:enqueue
 -- @nick unshift
--- @tparam any item
+-- @tparam vararg ...
 -- @treturn self
-function queue:enqueue( item )
-	table.insert( self, 1, item )
+function queue:enqueue( ... )
+	table.insert( self, 1, { ... } )
 	return self
 end
 queue.unshift = queue.enqueue
@@ -42,9 +42,9 @@ queue.unshift = queue.enqueue
 -- This method can be called as a function.
 -- @function queue:dequeue
 -- @nick shift
--- @treturn any
+-- @treturn vararg
 function queue:dequeue()
-	return table.remove( self )
+	return unpack( table.remove( self ) )
 end
 queue.shift = queue.dequeue
 
