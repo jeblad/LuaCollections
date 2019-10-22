@@ -1,6 +1,4 @@
---- Tests for the util module.
--- @license GPL-2.0-or-later
--- @author John Erling Blad < jeblad@gmail.com >
+--- Tests for the stack module.
 
 local testframework = require 'Module:TestFramework'
 
