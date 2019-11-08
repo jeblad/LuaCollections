@@ -6,7 +6,7 @@
 -- @module Stack
 
 -- pure libs
---local util = require 'tableUtil'
+local util = require 'collectionUtil'
 
 -- @var metatable for stacks
 local stack = {}
@@ -26,23 +26,30 @@ function stack.new( ... )
 	return new
 end
 
---- Push an item on the stack.
+--- Push items on the stack.
 -- This method can be called as a function.
 -- @function stack:push
 -- @tparam vararg ...
 -- @treturn self
 function stack:push( ... )
-	table.insert( self, { ... } )
+	for _,v in ipairs{ ... } do
+		table.insert( self, v )
+	end
 	return self
 end
 
---- Pop an item off the stack.
+--- Pop one or more items off the stack.
 -- This method can be called as a function.
 -- @function stack:pop
 -- @nick drop
+-- @tparam number n levels to be popped
 -- @treturn varag
-function stack:pop()
-	return unpack( table.remove( self ) )
+function stack:pop( n )
+	local t = {}
+	for i = 1, ( n or 1 ) do
+		t[i] = table.remove( self )
+	end
+	return unpack( t )
 end
 stack.drop = stack.pop
 
@@ -52,7 +59,7 @@ stack.drop = stack.pop
 -- @function stack:isEmpty
 -- @treturn boolean
 function stack:isEmpty()
-	return util.count( self ) == 0
+	return util.empty( self )
 end
 
 --- Count number of entries in stack.

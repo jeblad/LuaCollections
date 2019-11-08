@@ -5,11 +5,24 @@ local testframework = require 'Module:TestFramework'
 local lib = require 'stack'
 assert( lib )
 
-local function testExists()
-	return type( lib )
+local function testCreateAndSinglecall( name, ... )
+	local obj = lib.new( ... )
+	return pcall( function() return obj[name]( obj ) end )
 end
 
-local function testFunction( obj, into, outof, ... )
+local function testCreateAndMulticall( name, ... )
+	local results = {}
+	for i,v in ipairs{ ... } do
+		local obj = lib.new( unpack( v ) )
+		results[i] = { pcall( function() return obj[name]( obj ) end ) }
+		if not results[i][1] then
+			return results[i][2]
+		end
+	end
+	return unpack( results )
+end
+
+local function testMethod( obj, into, outof, ... )
 	local results = {}
 	for _,v in ipairs{ ... } do
 		local res,err = pcall( function( ... ) obj[into]( obj, ... ) end, unpack( v ) )
@@ -28,24 +41,64 @@ end
 
 local tests = {
 	{
-		name = 'Verify the lib is loaded and exists',
-		func = testExists,
-		type = 'ToString',
-		expect = { 'table' }
+		name = 'Create – pop',
+		func = testCreateAndMulticall,
+		args = { 'pop',
+			{ nil },
+			{ 'foo' },
+			{ 'bar', 'baz' },
+		},
+		expect = {
+			{ true, },
+			{ true, 'foo' },
+			{ true, 'baz' },
+		}
 	},
 	{
 		name = 'Push – pop',
-		func = testFunction,
+		func = testMethod,
 		args = { lib.new(), 'push', 'pop',
 			{ nil },
 			{ 'foo' },
 			{ 'bar', 'baz' },
 		},
 		expect = {
-			{ true, 'bar', 'baz' },
+			{ true, 'baz' },
+			{ true, 'bar' },
 			{ true, 'foo' },
-			{ true, nil },
 		}
+	},
+	{
+		name = 'Create – isEmpty',
+		func = testCreateAndSinglecall,
+		args = { 'isEmpty' },
+		expect = { true, true }
+	},
+	{
+		name = 'Create – isEmpty',
+		func = testCreateAndSinglecall,
+		args = { 'isEmpty',
+			{ nil },
+			{ 'foo' },
+			{ 'bar', 'baz' },
+		},
+		expect = { true, false }
+	},
+	{
+		name = 'Create – count',
+		func = testCreateAndSinglecall,
+		args = { 'count' },
+		expect = { true, 0 }
+	},
+	{
+		name = 'Create – count',
+		func = testCreateAndSinglecall,
+		args = { 'count',
+			{ nil },
+			{ 'foo' },
+			{ 'bar', 'baz' },
+		},
+		expect = { true, 3 }
 	},
 }
 
