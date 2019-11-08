@@ -8,10 +8,6 @@ use Scribunto_LuaEngineTestBase;
 
 /**
  * @group LuaCollections
- *
- * @license GPL-2.0-or-later
- *
- * @author John Erling Blad < jeblad@gmail.com >
  */
 class UtilTest extends Scribunto_LuaEngineTestBase {
 
