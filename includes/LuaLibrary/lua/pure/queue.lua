@@ -16,7 +16,7 @@ queue.__index = queue
 
 --- Create a new instance.
 -- @function queue.new
--- @tparam vararg ... arguments to be passed on
+-- @tparam vararg ... arguments to be collected
 -- @treturn self
 function queue.new( ... )
 	local new = setmetatable( {}, queue )
@@ -29,7 +29,6 @@ function queue.new( ... )
 end
 
 --- Enqueue items into the queue.
--- This method can be called as a function.
 -- @function queue:enqueue
 -- @nick unshift
 -- @tparam vararg ...
@@ -43,7 +42,6 @@ end
 queue.unshift = queue.enqueue
 
 --- Dequeue one or more items out of the queue.
--- This method can be called as a function.
 -- @function queue:dequeue
 -- @nick shift
 -- @tparam number n levels to be popped
@@ -59,7 +57,6 @@ queue.shift = queue.dequeue
 
 --- Is the queue empty.
 -- Checks by counting items whether queue is empty.
--- This method can be called as a function.
 -- @function queue:isEmpty
 -- @treturn boolean
 function queue:isEmpty()
@@ -67,7 +64,6 @@ function queue:isEmpty()
 end
 
 --- Count number of entries in queue.
--- This method can be called as a function.
 -- @function queue:count
 -- @treturn number
 function queue:count()
