@@ -1,9 +1,9 @@
 --- Class for a map.
 -- This is an open structure, to make it easy to extend and adapt.
 -- That is, the queue can be abused by manipulating it as an ordinary table.
--- Items can be added to the map, but not removed.
+-- Items can be added to the map, and removed.
 -- See also Wikipedias page on [map](https://en.wikipedia.org/wiki/map_(abstract_data_type)).
--- @module map
+-- @module Map
 
 -- pure libs
 local colUtil = require 'collectionUtil'
@@ -59,9 +59,9 @@ local function makeMap( ... )
 
 		for _,v in ipairs{ ... } do
 			for k, w in pairs( v ) do
-				if type( outer[k] ) == 'nil' and type( w ) ~= 'nil' then
+				if type( self[k] ) == 'nil' and type( w ) ~= 'nil' then
 					_length = _length + 1
-				elseif type( outer[k] ) ~= 'nil' and type( w ) == 'nil' then
+				elseif type( self[k] ) ~= 'nil' and type( w ) == 'nil' then
 					_length = _length - 1
 				end
 				self[k] = w
@@ -72,9 +72,32 @@ local function makeMap( ... )
 	end
 	inner.inject = inner.insert
 
-	--- Remove items from the map.
+	--- Reject item values from the map.
+	-- @function map:reject
+	-- @tparam vararg ...
+	-- @treturn vararg
+	function inner:reject( ... )
+		checkSelf( self, 'reject' )
+
+		local values = {}
+		for _,v in ipairs{ ... } do
+			values[v] = true
+		end
+
+		local t = {}
+		for k,v in pairs( self ) do
+			if values[v] then
+				_length = _length - 1
+				table.insert( t, self[k] )
+				self[k] = nil
+			end
+		end
+
+		return t
+	end
+
+	--- Remove item keys from the map.
 	-- @function map:remove
-	-- @nick reject
 	-- @tparam vararg ...
 	-- @treturn self
 	function inner:remove( ... )
@@ -82,32 +105,14 @@ local function makeMap( ... )
 
 		local t = {}
 		for _,v in ipairs{ ... } do
-			if type( outer[v] ) ~= 'nil' then
+			if type( self[v] ) ~= 'nil' then
 				_length = _length - 1
+				table.insert( t, self[v] )
+				self[v] = nil
 			end
-			t[v] = self[v]
-			self[v] = nil
 		end
 
 		return t
-	end
-	inner.reject = inner.remove
-
-	--- Drop one or more items off the map.
-	-- @function map:drop
-	-- @tparam vararg ...
-	-- @treturn self
-	function inner:drop( ... )
-		checkSelf( self, 'drop' )
-
-		for _,v in ipairs{ ... } do
-			if self[v] then
-				_length = _length - 1
-			end
-			self[v] = nil
-		end
-
-		return self
 	end
 
 	--- Find an item in the map.

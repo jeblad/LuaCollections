@@ -51,7 +51,7 @@ local tests = {
 		expect = {
 			{ true, 0, {}, 0 },
 			{ true, 1, {}, 1 },
-			{ true, 2, { y = 'bar' }, 1 },
+			{ true, 2, { 'bar' }, 1 },
 		}
 	},
 	{
@@ -77,7 +77,7 @@ local tests = {
 			{ y = 'bar', z = 'baz' },
 		},
 		expect = {
-			{ true, 3, { y = 'bar' } },
+			{ true, 3, { 'bar' } },
 			{ true, 2, {} },
 			{ true, 2, {} },
 		}
