@@ -16,7 +16,7 @@ stack.__index = stack
 
 --- Create a new instance.
 -- @function stack.new
--- @tparam vararg ... arguments to be passed on
+-- @tparam vararg ... arguments to be collected
 -- @treturn self
 function stack.new( ... )
 	local new = setmetatable( {}, stack )
@@ -27,7 +27,6 @@ function stack.new( ... )
 end
 
 --- Push items on the stack.
--- This method can be called as a function.
 -- @function stack:push
 -- @tparam vararg ...
 -- @treturn self
@@ -39,7 +38,6 @@ function stack:push( ... )
 end
 
 --- Pop one or more items off the stack.
--- This method can be called as a function.
 -- @function stack:pop
 -- @nick drop
 -- @tparam number n levels to be popped
@@ -55,7 +53,6 @@ stack.drop = stack.pop
 
 --- Is the stack empty.
 -- Checks by counting items whether stack is empty.
--- This method can be called as a function.
 -- @function stack:isEmpty
 -- @treturn boolean
 function stack:isEmpty()
@@ -63,7 +60,6 @@ function stack:isEmpty()
 end
 
 --- Count number of entries in stack.
--- This method can be called as a function.
 -- @function stack:count
 -- @treturn number
 function stack:count()
