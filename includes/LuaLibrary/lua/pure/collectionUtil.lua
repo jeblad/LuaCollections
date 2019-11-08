@@ -5,6 +5,16 @@
 -- @var Table holding the modules exported members
 local util = {}
 
+--- Raw abrupt table test.
+-- @tparam table t has its entries counted
+-- @treturn nil|boolean raw existence, nil on no arg
+function util.empty( t )
+	if not t then
+		return nil
+	end
+	return not next( t )
+end
+
 --- Raw table count of all the items.
 -- Simplified variant of
 -- ['count()'](https://github.com/Yonaba/Moses/blob/master/moses.lua#L308-L322)
