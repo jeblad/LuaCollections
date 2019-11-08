@@ -14,7 +14,7 @@ local function testCreateAndMulticall( name, ... )
 	local results = {}
 	for i,v in ipairs{ ... } do
 		local obj = lib.new( unpack( v ) )
-		results[i] = { pcall( function() return obj[name]( obj ) end ) }
+		results[i] = { pcall( function() return obj:length(), obj[name]( obj ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -31,7 +31,7 @@ local function testMethod( obj, into, outof, ... )
 		end
 	end
 	for i,_ in ipairs{ ... } do
-		results[i] = { pcall( function() return obj[outof]( obj ) end ) }
+		results[i] = { pcall( function() return obj:length(), obj[outof]( obj ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -49,9 +49,9 @@ local tests = {
 			{ 'bar', 'baz' },
 		},
 		expect = {
-			{ true, },
-			{ true, 'foo' },
-			{ true, 'baz' },
+			{ true, 0, },
+			{ true, 1, 'foo' },
+			{ true, 2, 'baz' },
 		}
 	},
 	{
@@ -63,9 +63,9 @@ local tests = {
 			{ 'bar', 'baz' },
 		},
 		expect = {
-			{ true, 'baz' },
-			{ true, 'bar' },
-			{ true, 'foo' },
+			{ true, 3, 'baz' },
+			{ true, 2, 'bar' },
+			{ true, 1, 'foo' },
 		}
 	},
 	{
