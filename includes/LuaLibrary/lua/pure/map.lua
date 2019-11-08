@@ -40,6 +40,11 @@ local function makeMap( ... )
 	-- keep in exposed structure
 	for _,v in ipairs{ ... } do
 		for k, w in pairs( v ) do
+			if type( outer[k] ) == 'nil' and type( w ) ~= 'nil' then
+				_length = _length + 1
+			elseif type( outer[k] ) ~= 'nil' and type( w ) == 'nil' then
+				_length = _length - 1
+			end
 			outer[k] = w
 		end
 	end
@@ -54,8 +59,10 @@ local function makeMap( ... )
 
 		for _,v in ipairs{ ... } do
 			for k, w in pairs( v ) do
-				if not self[k] then
+				if type( outer[k] ) == 'nil' and type( w ) ~= 'nil' then
 					_length = _length + 1
+				elseif type( outer[k] ) ~= 'nil' and type( w ) == 'nil' then
+					_length = _length - 1
 				end
 				self[k] = w
 			end
@@ -75,7 +82,7 @@ local function makeMap( ... )
 
 		local t = {}
 		for _,v in ipairs{ ... } do
-			if self[v] then
+			if type( outer[v] ) ~= 'nil' then
 				_length = _length - 1
 			end
 			t[v] = self[v]
