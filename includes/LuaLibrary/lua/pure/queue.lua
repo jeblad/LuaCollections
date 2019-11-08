@@ -6,7 +6,7 @@
 -- @module Queue
 
 -- pure libs
---local util = require 'tableUtil'
+local util = require 'collectionUtil'
 
 -- @var metatable for queues
 local queue = {}
@@ -20,31 +20,40 @@ queue.__index = queue
 -- @treturn self
 function queue.new( ... )
 	local new = setmetatable( {}, queue )
-	for _,v in ipairs{ ... } do
-		table.insert( new, 1, v )
+	local n = select( '#', ... )
+	for i,v in ipairs{ ... } do
+		new[n-i+1] = v
+		--table.insert( new, 1, v )
 	end
 	return new
 end
 
---- Enqueue an item into the queue.
+--- Enqueue items into the queue.
 -- This method can be called as a function.
 -- @function queue:enqueue
 -- @nick unshift
 -- @tparam vararg ...
 -- @treturn self
 function queue:enqueue( ... )
-	table.insert( self, 1, { ... } )
+	for _,v in ipairs{ ... } do
+		table.insert( self, 1, v )
+	end
 	return self
 end
 queue.unshift = queue.enqueue
 
---- Dequeue an item out of the queue.
+--- Dequeue one or more items out of the queue.
 -- This method can be called as a function.
 -- @function queue:dequeue
 -- @nick shift
+-- @tparam number n levels to be popped
 -- @treturn vararg
-function queue:dequeue()
-	return unpack( table.remove( self ) )
+function queue:dequeue( n )
+	local t = {}
+	for i = 1, ( n or 1 ) do
+		t[i] = table.remove( self )
+	end
+	return unpack( t )
 end
 queue.shift = queue.dequeue
 
@@ -54,7 +63,7 @@ queue.shift = queue.dequeue
 -- @function queue:isEmpty
 -- @treturn boolean
 function queue:isEmpty()
-	return util.count( self ) == 0
+	return util.empty( self )
 end
 
 --- Count number of entries in queue.
