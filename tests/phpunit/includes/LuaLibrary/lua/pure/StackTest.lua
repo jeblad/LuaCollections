@@ -5,16 +5,10 @@ local testframework = require 'Module:TestFramework'
 local lib = require 'stack'
 assert( lib )
 
-local function testCreateAndSinglecall( name, ... )
-	local obj = lib.new( ... )
-	return pcall( function() return obj[name]( obj ) end )
-end
-
-local function testCreateAndMulticall( name, ... )
+local function testCreate( ... )
 	local results = {}
 	for i,v in ipairs{ ... } do
-		local obj = lib.new( unpack( v ) )
-		results[i] = { pcall( function() return obj:length(), obj[name]( obj ) end ) }
+		results[i] = { pcall( function() return lib.new( unpack( v ) ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -22,16 +16,12 @@ local function testCreateAndMulticall( name, ... )
 	return unpack( results )
 end
 
-local function testMethod( obj, into, outof, ... )
+local function testMethod( ... )
 	local results = {}
-	for _,v in ipairs{ ... } do
-		local res,err = pcall( function( ... ) obj[into]( obj, ... ) end, unpack( v ) )
-		if not res then
-			return err
-		end
-	end
-	for i,_ in ipairs{ ... } do
-		results[i] = { pcall( function() return obj:length(), obj[outof]( obj ) end ) }
+	for i,v in ipairs{ ... } do
+		local obj = table.remove( v, 1 )
+		local met = table.remove( v, 1 )
+		results[i] = { pcall( function() return obj[met]( obj, unpack( v ) ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -41,64 +31,112 @@ end
 
 local tests = {
 	{
-		name = 'Create – pop',
-		func = testCreateAndMulticall,
-		args = { 'pop',
-			{ nil },
+		name = 'new',
+		func = testCreate,
+		args = {
+			{},
 			{ 'foo' },
 			{ 'bar', 'baz' },
+			{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
 		},
 		expect = {
-			{ true, 0, },
-			{ true, 1, 'foo' },
-			{ true, 2, 'baz' },
+			{ true, {} },
+			{ true, { 'foo' } },
+			{ true, { 'bar', 'baz' } },
+			{ true, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } },
 		}
 	},
 	{
-		name = 'Push – pop',
+		name = 'push',
 		func = testMethod,
-		args = { lib.new(), 'push', 'pop',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
+		args = {
+			{ lib.new(), 'push', },
+			{ lib.new(), 'push', 'foo' },
+			{ lib.new(), 'push', 'bar', 'baz' },
+			{ lib.new(), 'push', 1, 2, 3, 4, 5, 6, 7, 8, 9 },
 		},
 		expect = {
-			{ true, 3, 'baz' },
-			{ true, 2, 'bar' },
-			{ true, 1, 'foo' },
+			{ true, {} },
+			{ true, { 'foo' } },
+			{ true, { 'bar', 'baz' } },
+			{ true, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } },
 		}
 	},
 	{
-		name = 'Create – isEmpty',
-		func = testCreateAndSinglecall,
-		args = { 'isEmpty' },
-		expect = { true, true }
-	},
-	{
-		name = 'Create – isEmpty',
-		func = testCreateAndSinglecall,
-		args = { 'isEmpty',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
+		name = 'pop',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'pop', },
+			{ lib.new( 'foo', 'bar' ), 'pop', },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'pop', 2 },
+			{ lib.new( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), 'pop', 3, true },
 		},
-		expect = { true, false }
+		expect = {
+			{ true, },
+			{ true, 'bar' },
+			{ true, 'baz', 'bar' },
+			{ true, { 9, 8, 7 } },
+		}
 	},
 	{
-		name = 'Create – count',
-		func = testCreateAndSinglecall,
-		args = { 'count' },
-		expect = { true, 0 }
-	},
-	{
-		name = 'Create – count',
-		func = testCreateAndSinglecall,
-		args = { 'count',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
+		name = 'drop',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'drop', },
+			{ lib.new( 'foo', 'bar' ), 'drop', },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'drop', 2 },
+			{ lib.new( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), 'drop', 3 },
 		},
-		expect = { true, 3 }
+		expect = {
+			{ true, {} },
+			{ true, { 'foo' } },
+			{ true, { 'foo' } },
+			{ true, { 1, 2, 3, 4, 5, 6 } },
+		}
+	},
+	{
+		name = 'isEmpty',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'isEmpty', },
+			{ lib.new( 'foo' ), 'isEmpty' },
+		},
+		expect = {
+			{ true, true },
+			{ true, false },
+		}
+	},
+	{
+		name = 'length',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'length', },
+			{ lib.new( 'foo' ), 'length' },
+			{ lib.new( 'foo', 'bar' ), 'length' },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'length' },
+		},
+		expect = {
+			{ true, 0 },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
+		}
+	},
+	{
+		name = 'count',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'count', },
+			{ lib.new( 'foo' ), 'count' },
+			{ lib.new( 'foo', 'bar' ), 'count' },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'count' },
+		},
+		expect = {
+			{ true, 0 },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
+		}
 	},
 }
 

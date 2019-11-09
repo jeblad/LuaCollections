@@ -52,8 +52,9 @@ local function makeStack( ... )
 		outer[i] = v
 	end
 
-	--- Push items on the stack.
+	--- Push zero or more items on the stack.
 	-- @function stack:push
+	-- @nick insert
 	-- @tparam vararg ...
 	-- @treturn self
 	function inner:push( ... )
@@ -66,12 +67,14 @@ local function makeStack( ... )
 
 		return self
 	end
+	inner.insert = inner.push
 
 	--- Pop one or more items off the stack.
 	-- @function stack:pop
 	-- @tparam number n levels to be popped
+	-- @tparam nil|boolean pack result in table
 	-- @treturn varag
-	function inner:pop( n )
+	function inner:pop( n, pack )
 		checkSelf( self, 'pop' )
 		checkType( 'stack:pop', 1, n, 'number', true )
 
@@ -81,7 +84,7 @@ local function makeStack( ... )
 			t[i] = table.remove( self )
 		end
 
-		if not n then
+		if not pack then
 			return unpack( t )
 		end
 
@@ -90,19 +93,21 @@ local function makeStack( ... )
 
 	--- Drop one or more items off the stack.
 	-- @function stack:drop
+	-- @nick remove
 	-- @tparam number n levels to be dropped
 	-- @treturn self
 	function inner:drop( n )
 		checkSelf( self, 'drop' )
 		checkType( 'stack:drop', 1, n, 'number', true )
 
-		for i = 1, ( n or 1 ) do
+		for _ = 1, ( n or 1 ) do
 			_length = _length - 1
 			table.remove( self )
 		end
 
 		return self
 	end
+	inner.remove = inner.drop
 
 	--- Length of structure.
 	-- @function stack:length
