@@ -5,16 +5,10 @@ local testframework = require 'Module:TestFramework'
 local lib = require 'queue'
 assert( lib )
 
-local function testCreateAndSinglecall( name, ... )
-	local obj = lib.new( ... )
-	return pcall( function() return obj[name]( obj ) end )
-end
-
-local function testCreateAndMulticall( name, ... )
+local function testCreate( ... )
 	local results = {}
 	for i,v in ipairs{ ... } do
-		local obj = lib.new( unpack( v ) )
-		results[i] = { pcall( function() return obj:length(), obj[name]( obj ) end ) }
+		results[i] = { pcall( function() return lib.new( unpack( v ) ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -22,16 +16,12 @@ local function testCreateAndMulticall( name, ... )
 	return unpack( results )
 end
 
-local function testMethod( obj, into, outof, ... )
+local function testMethod( ... )
 	local results = {}
-	for _,v in ipairs{ ... } do
-		local res,err = pcall( function( ... ) obj[into]( obj, ... ) end, unpack( v ) )
-		if not res then
-			return err
-		end
-	end
-	for i,_ in ipairs{ ... } do
-		results[i] = { pcall( function() return obj:length(), obj[outof]( obj ) end ) }
+	for i,v in ipairs{ ... } do
+		local obj = table.remove( v, 1 )
+		local met = table.remove( v, 1 )
+		results[i] = { pcall( function() return obj[met]( obj, unpack( v ) ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -41,64 +31,112 @@ end
 
 local tests = {
 	{
-		name = 'Create – dequeue',
-		func = testCreateAndMulticall,
-		args = { 'dequeue',
-			{ nil },
+		name = 'new',
+		func = testCreate,
+		args = {
+			{},
 			{ 'foo' },
 			{ 'bar', 'baz' },
+			{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		},
+		expect = {
+			{ true, {} },
+			{ true, { 'foo' } },
+			{ true, { 'baz', 'bar' } },
+			{ true, { 9, 8, 7, 6, 5, 4, 3, 2, 1 } },
+		}
+	},
+	{
+		name = 'enqueue',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'enqueue', },
+			{ lib.new(), 'enqueue', 'foo' },
+			{ lib.new(), 'enqueue', 'bar', 'baz' },
+			{ lib.new(), 'enqueue', 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		},
+		expect = {
+			{ true, {} },
+			{ true, { 'foo' } },
+			{ true, { 'baz', 'bar' } },
+			{ true, { 9, 8, 7, 6, 5, 4, 3, 2, 1 } },
+		}
+	},
+	{
+		name = 'dequeue',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'dequeue', },
+			{ lib.new( 'foo', 'bar' ), 'dequeue', },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'dequeue', 2 },
+			{ lib.new( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), 'dequeue', 3, true },
+		},
+		expect = {
+			{ true, },
+			{ true, 'foo' },
+			{ true, 'foo', 'bar' },
+			{ true, { 1, 2, 3 } },
+		}
+	},
+	{
+		name = 'drop',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'drop', },
+			{ lib.new( 'foo', 'bar' ), 'drop', },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'drop', 2 },
+			{ lib.new( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), 'drop', 3 },
+		},
+		expect = {
+			{ true, {} },
+			{ true, { 'bar' } },
+			{ true, { 'baz' } },
+			{ true, { 9, 8, 7, 6, 5, 4 } },
+		}
+	},
+	{
+		name = 'isEmpty',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'isEmpty', },
+			{ lib.new( 'foo' ), 'isEmpty' },
+		},
+		expect = {
+			{ true, true },
+			{ true, false },
+		}
+	},
+	{
+		name = 'length',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'length', },
+			{ lib.new( 'foo' ), 'length' },
+			{ lib.new( 'foo', 'bar' ), 'length' },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'length' },
 		},
 		expect = {
 			{ true, 0 },
-			{ true, 1, 'foo' },
-			{ true, 2, 'bar' },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
 		}
 	},
 	{
-		name = 'Enqueue – dequeue',
+		name = 'count',
 		func = testMethod,
-		args = { lib.new(), 'enqueue', 'dequeue',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
+		args = {
+			{ lib.new(), 'count', },
+			{ lib.new( 'foo' ), 'count' },
+			{ lib.new( 'foo', 'bar' ), 'count' },
+			{ lib.new( 'foo', 'bar', 'baz' ), 'count' },
 		},
 		expect = {
-			{ true, 3, 'foo' },
-			{ true, 2, 'bar' },
-			{ true, 1, 'baz' },
+			{ true, 0 },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
 		}
-	},
-	{
-		name = 'Create – isEmpty',
-		func = testCreateAndSinglecall,
-		args = { 'isEmpty' },
-		expect = { true, true }
-	},
-	{
-		name = 'Create – isEmpty',
-		func = testCreateAndSinglecall,
-		args = { 'isEmpty',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
-		},
-		expect = { true, false }
-	},
-	{
-		name = 'Create – count',
-		func = testCreateAndSinglecall,
-		args = { 'count' },
-		expect = { true, 0 }
-	},
-	{
-		name = 'Create – count',
-		func = testCreateAndSinglecall,
-		args = { 'count',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
-		},
-		expect = { true, 3 }
 	},
 }
 

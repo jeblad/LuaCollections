@@ -47,15 +47,16 @@ local function makeQueue( ... )
 	local _length = 0
 
 	-- keep in exposed structure
-	local n = select( '#', ... )
+	local len = select( '#', ... )
 	for i,v in ipairs{ ... } do
 		_length = _length + 1
-		outer[n-i+1] = v
+		outer[len-i+1] = v
 	end
 
-	--- Enqueue items into the queue.
+	--- Enqueue zero or more items into the queue.
 	-- @function queue:enqueue
 	-- @nick unshift
+	-- @nick insert
 	-- @tparam vararg ...
 	-- @treturn self
 	function inner:enqueue( ... )
@@ -69,13 +70,15 @@ local function makeQueue( ... )
 		return self
 	end
 	inner.unshift = inner.enqueue
+	inner.insert = inner.enqueue
 
 	--- Dequeue one or more items out of the queue.
 	-- @function queue:dequeue
 	-- @nick shift
 	-- @tparam number n levels to be popped
+	-- @tparam nil|boolean pack result in table
 	-- @treturn vararg
-	function inner:dequeue( n )
+	function inner:dequeue( n, pack )
 		checkSelf( self, 'dequeue' )
 		checkType( 'queue:dequeue', 1, n, 'number', true )
 
@@ -85,25 +88,32 @@ local function makeQueue( ... )
 			t[i] = table.remove( self )
 		end
 
-		return unpack( t )
+		if not pack then
+			return unpack( t )
+		end
+
+		return t
 	end
 	inner.shift = inner.dequeue
 
 	--- Drop one or more items off the queue.
 	-- @function queue:drop
+	-- @nick remove
 	-- @tparam number n levels to be dropped
 	-- @treturn self
 	function inner:drop( n )
 		checkSelf( self, 'drop' )
 		checkType( 'queues:drop', 1, n, 'number', true )
 
-		for i = 1, ( n or 1 ) do
+		for _ = 1, ( n or 1 ) do
 			_length = _length - 1
 			table.remove( self )
 		end
 
 		return self
 	end
+	inner.remove = inner.drop
+
 	--- Length of structure.
 	-- @function queue:length
 	-- @treturn number
