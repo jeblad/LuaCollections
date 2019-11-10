@@ -77,6 +77,7 @@ local function makeStack( ... )
 	function inner:pop( n, pack )
 		checkSelf( self, 'pop' )
 		checkType( 'stack:pop', 1, n, 'number', true )
+		checkType( 'stack:pop', 2, pack, 'boolean', true )
 
 		local t = {}
 		for i = 1, ( n or 1 ) do
