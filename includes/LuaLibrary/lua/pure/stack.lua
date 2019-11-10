@@ -11,7 +11,6 @@ local libUtil = require 'libraryUtil'
 
 -- lookup
 local checkType = libUtil.checkType
-local makeCheckSelfFunction = libUtil.makeCheckSelfFunction
 
 -- @var metatable for stacks
 local stack = {}
@@ -33,92 +32,14 @@ end
 -- @tparam vararg ... arguments to be collected
 -- @treturn self
 local function makeStack( ... )
-	local inner = setmetatable( {}, stack )
-	inner.__index = inner
-	local outer = setmetatable( {}, inner )
-
-	--- Check whether method is part of self.
-	-- @local
-	-- @function checkSelf
-	-- @raise if called from a method not part of self
-	local checkSelf = makeCheckSelfFunction( 'stack', 'obj', outer, 'stack object' )
-
-	-- keep in closure
-	local _length = 0
+	local obj = setmetatable( {}, stack )
 
 	-- keep in exposed structure
 	for i,v in ipairs{ ... } do
-		_length = _length + 1
-		outer[i] = v
+		obj[i] = v
 	end
 
-	--- Push zero or more items on the stack.
-	-- @function stack:push
-	-- @nick insert
-	-- @tparam vararg ...
-	-- @treturn self
-	function inner:push( ... )
-		checkSelf( self, 'push' )
-
-		for _,v in ipairs{ ... } do
-			_length = _length + 1
-			table.insert( self, v )
-		end
-
-		return self
-	end
-	inner.insert = inner.push
-
-	--- Pop one or more items off the stack.
-	-- @function stack:pop
-	-- @tparam number n levels to be popped
-	-- @tparam nil|boolean pack result in table
-	-- @treturn varag
-	function inner:pop( n, pack )
-		checkSelf( self, 'pop' )
-		checkType( 'stack:pop', 1, n, 'number', true )
-		checkType( 'stack:pop', 2, pack, 'boolean', true )
-
-		local t = {}
-		for i = 1, ( n or 1 ) do
-			_length = _length - 1
-			t[i] = table.remove( self )
-		end
-
-		if not pack then
-			return unpack( t )
-		end
-
-		return t
-	end
-
-	--- Drop one or more items off the stack.
-	-- @function stack:drop
-	-- @nick remove
-	-- @tparam number n levels to be dropped
-	-- @treturn self
-	function inner:drop( n )
-		checkSelf( self, 'drop' )
-		checkType( 'stack:drop', 1, n, 'number', true )
-
-		for _ = 1, ( n or 1 ) do
-			_length = _length - 1
-			table.remove( self )
-		end
-
-		return self
-	end
-	inner.remove = inner.drop
-
-	--- Length of structure.
-	-- @function stack:length
-	-- @treturn number
-	function inner:length()
-		checkSelf( self, 'length' )
-		return _length
-	end
-
-	return outer
+	return obj
 end
 
 --- Create a new instance.
@@ -128,6 +49,56 @@ end
 function stack.new( ... )
 	return makeStack( ... )
 end
+
+--- Push zero or more items on the stack.
+-- @function stack:push
+-- @nick insert
+-- @tparam vararg ...
+-- @treturn self
+function stack:push( ... )
+	for _,v in ipairs{ ... } do
+		table.insert( self, v )
+	end
+
+	return self
+end
+stack.insert = stack.push
+
+--- Pop one or more items off the stack.
+-- @function stack:pop
+-- @tparam number n levels to be popped
+-- @tparam nil|boolean pack result in table
+-- @treturn varag
+function stack:pop( n, pack )
+	checkType( 'stack:pop', 2, pack, 'boolean', true )
+
+	local t = {}
+	for i = 1, ( n or 1 ) do
+		t[i] = table.remove( self )
+	end
+
+	if not pack then
+		return unpack( t )
+	end
+
+	return t
+end
+
+--- Drop one or more items off the stack.
+-- @function stack:drop
+-- @nick remove
+-- @tparam number n levels to be dropped
+-- @treturn self
+function stack:drop( n )
+	checkType( 'stack:drop', 1, n, 'number', true )
+
+	for _ = 1, ( n or 1 ) do
+		table.remove( self )
+	end
+
+	return self
+end
+stack.remove = stack.drop
 
 --- Is the stack empty.
 -- Checks by counting items whether stack is empty.
