@@ -49,7 +49,7 @@ local function makeMap( ... )
 		end
 	end
 
-	--- Insert items to the map.
+	--- Insert zero or more items into the map.
 	-- @function map:insert
 	-- @nick inject
 	-- @tparam vararg ...
@@ -72,10 +72,10 @@ local function makeMap( ... )
 	end
 	inner.inject = inner.insert
 
-	--- Reject item values from the map.
+	--- Reject zero or more items by value from the map.
 	-- @function map:reject
 	-- @tparam vararg ...
-	-- @treturn vararg
+	-- @treturn table
 	function inner:reject( ... )
 		checkSelf( self, 'reject' )
 
@@ -88,7 +88,7 @@ local function makeMap( ... )
 		for k,v in pairs( self ) do
 			if values[v] then
 				_length = _length - 1
-				table.insert( t, self[k] )
+				table.insert( t, { k, v } )
 				self[k] = nil
 			end
 		end
@@ -96,18 +96,18 @@ local function makeMap( ... )
 		return t
 	end
 
-	--- Remove item keys from the map.
+	--- Remove zero or more items by key from the map.
 	-- @function map:remove
 	-- @tparam vararg ...
-	-- @treturn self
+	-- @treturn table
 	function inner:remove( ... )
 		checkSelf( self, 'remove' )
 
 		local t = {}
-		for _,v in ipairs{ ... } do
+		for i,v in ipairs{ ... } do
 			if type( self[v] ) ~= 'nil' then
 				_length = _length - 1
-				table.insert( t, self[v] )
+				table.insert( t, { i, v } )
 				self[v] = nil
 			end
 		end
@@ -115,13 +115,12 @@ local function makeMap( ... )
 		return t
 	end
 
-	--- Find an item in the map.
-	-- @function map:find
-	-- @nick has
+	--- Copy zero or more items by key from the map.
+	-- @function map:copy
 	-- @tparam vararg ...
-	-- @treturn any
-	function inner:find( ... )
-		checkSelf( self, 'find' )
+	-- @treturn table
+	function inner:copy( ... )
+		checkSelf( self, 'copy' )
 
 		local t = {}
 		for _,v in ipairs{ ... } do
@@ -130,7 +129,6 @@ local function makeMap( ... )
 
 		return t
 	end
-	inner.has = inner.find
 
 	--- Length of structure.
 	-- @function stack:length

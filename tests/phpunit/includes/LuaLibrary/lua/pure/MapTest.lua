@@ -5,16 +5,10 @@ local testframework = require 'Module:TestFramework'
 local lib = require 'map'
 assert( lib )
 
-local function testCreateAndSinglecall( name, ... )
-	local obj = lib.new( ... )
-	return pcall( function() return obj[name]( obj ) end )
-end
-
-local function testCreateAndMulticall( name, arguments, ... )
+local function testCreate( ... )
 	local results = {}
 	for i,v in ipairs{ ... } do
-		local obj = lib.new( v )
-		results[i] = { pcall( function() return obj:length(), obj[name]( obj, unpack(arguments) ), obj:length() end ) }
+		results[i] = { pcall( function() return lib.new( unpack( v ) ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -22,16 +16,12 @@ local function testCreateAndMulticall( name, arguments, ... )
 	return unpack( results )
 end
 
-local function testMethod( obj, into, outof, arguments, ... )
+local function testMethod( ... )
 	local results = {}
-	for _,v in ipairs{ ... } do
-		local res,err = pcall( function( ... ) obj[into]( obj, ... ) end, v )
-		if not res then
-			return err
-		end
-	end
-	for i,_ in ipairs{ ... } do
-		results[i] = { pcall( function() return obj:length(), obj[outof]( obj, unpack( arguments ) ) end ) }
+	for i,v in ipairs{ ... } do
+		local obj = table.remove( v, 1 )
+		local met = table.remove( v, 1 )
+		results[i] = { pcall( function() return obj[met]( obj, unpack( v ) ) end ) }
 		if not results[i][1] then
 			return results[i][2]
 		end
@@ -41,98 +31,102 @@ end
 
 local tests = {
 	{
-		name = 'Create – remove',
-		func = testCreateAndMulticall,
-		args = { 'remove', { 'y' },
-			{ nil },
-			{ x = 'foo' },
-			{ y = 'bar', z = 'baz' },
+		name = 'new',
+		func = testCreate,
+		args = {
+			{},
+			{ { x = 'foo' } },
+			{ { y = 'bar' }, { z = 'baz' } },
 		},
 		expect = {
-			{ true, 0, {}, 0 },
-			{ true, 1, {}, 1 },
-			{ true, 2, { 'bar' }, 1 },
+			{ true, {} },
+			{ true, { x = 'foo' } },
+			{ true, { y = 'bar', z = 'baz' } },
 		}
 	},
 	{
-		name = 'Create – find',
-		func = testCreateAndMulticall,
-		args = { 'find', { 'y' },
-			{ nil },
-			{ x = 'foo' },
-			{ y = 'bar', z = 'baz' },
-		},
-		expect = {
-			{ true, 0, {}, 0 },
-			{ true, 1, {}, 1 },
-			{ true, 2, { y = 'bar' }, 2 },
-		}
-	},
-	{
-		name = 'Insert – remove',
+		name = 'insert',
 		func = testMethod,
-		args = { lib.new(), 'insert', 'remove', { 'y' },
-			{ nil },
-			{ x = 'foo' },
-			{ y = 'bar', z = 'baz' },
+		args = {
+			{ lib.new(), 'insert', },
+			{ lib.new(), 'insert', { x = 'foo' } },
+			{ lib.new(), 'insert', { y = 'bar' }, { z = 'baz' } },
 		},
 		expect = {
-			{ true, 3, { 'bar' } },
-			{ true, 2, {} },
-			{ true, 2, {} },
+			{ true, {} },
+			{ true, { x = 'foo' } },
+			{ true, { y = 'bar', z = 'baz' } },
 		}
 	},
 	{
-		name = 'Create – isEmpty',
-		func = testCreateAndSinglecall,
-		args = { 'isEmpty' },
-		expect = { true, true }
-	},
-	{
-		name = 'Create – isEmpty',
-		func = testCreateAndSinglecall,
-		args = { 'isEmpty',
-			{ nil },
-			{ 'foo' },
-			{ 'bar', 'baz' },
+		name = 'reject',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'reject', },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'reject', 'foo' },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'reject', 'foo', 'bar' },
 		},
-		expect = { true, false }
+		expect = {
+			{ true, {} },
+			{ true, { { 'x', 'foo' } } },
+			{ true, {{ 'y', 'bar' }, { 'x', 'foo' } } },
+		}
 	},
 	{
-		name = 'Create – count',
-		func = testCreateAndSinglecall,
-		args = { 'count' },
-		expect = { true, 0 }
-	},
-	{
-		name = 'Create – count',
-		func = testCreateAndSinglecall,
-		args = { 'count',
-			{ a = nil },
-			{ b = false },
-			{ c = true },
-			{ x = 'foo' },
-			{ y = 'bar', z = 'baz' },
+		name = 'remove',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'remove', },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'remove', 'x' },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'remove', 'x', 'y' },
 		},
-		expect = { true, 5 }
+		expect = {
+			{ true, {} },
+			{ true, { { 1, 'x' } } },
+			{ true, { { 1, 'x' }, { 2, 'y' } } },
+		}
 	},
 	{
-		name = 'Create – length',
-		func = testCreateAndSinglecall,
-		args = { 'length' },
-		expect = { true, 0 }
-	},
-	{
-		name = 'Create – length',
-		func = testCreateAndSinglecall,
-		args = { 'length',
-			{ a = nil },
-			{ b = false },
-			{ c = true },
-			{ x = 'foo' },
-			{ y = 'bar', z = 'baz' },
+		name = 'copy',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'copy', },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'copy', 'x' },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'copy', 'x', 'y' },
 		},
-		expect = { true, 5 }
+		expect = {
+			{ true, {} },
+			{ true, { x = 'foo' } },
+			{ true, { x = 'foo', y = 'bar' } },
+		}
+	},
+	{
+		name = 'isEmpty',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'isEmpty', },
+			{ lib.new{ x = 'foo' }, 'isEmpty' },
+		},
+		expect = {
+			{ true, true },
+			{ true, false },
+		}
+	},
+	{
+		name = 'count',
+		func = testMethod,
+		args = {
+			{ lib.new(), 'count', },
+			{ lib.new{ x = 'foo' }, 'count' },
+			{ lib.new{ x = 'foo', y = 'bar' }, 'count' },
+			{ lib.new{ x = 'foo', y = 'bar', z = 'baz' }, 'count' },
+		},
+		expect = {
+			{ true, 0 },
+			{ true, 1 },
+			{ true, 2 },
+			{ true, 3 },
+		}
 	},
 }
 
