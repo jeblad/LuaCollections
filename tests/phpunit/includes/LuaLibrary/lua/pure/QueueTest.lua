@@ -107,22 +107,6 @@ local tests = {
 		}
 	},
 	{
-		name = 'length',
-		func = testMethod,
-		args = {
-			{ lib.new(), 'length', },
-			{ lib.new( 'foo' ), 'length' },
-			{ lib.new( 'foo', 'bar' ), 'length' },
-			{ lib.new( 'foo', 'bar', 'baz' ), 'length' },
-		},
-		expect = {
-			{ true, 0 },
-			{ true, 1 },
-			{ true, 2 },
-			{ true, 3 },
-		}
-	},
-	{
 		name = 'count',
 		func = testMethod,
 		args = {
