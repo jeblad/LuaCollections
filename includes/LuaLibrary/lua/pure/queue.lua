@@ -81,6 +81,7 @@ local function makeQueue( ... )
 	function inner:dequeue( n, pack )
 		checkSelf( self, 'dequeue' )
 		checkType( 'queue:dequeue', 1, n, 'number', true )
+		checkType( 'queue:dequeue', 2, pack, 'boolean', true )
 
 		local t = {}
 		for i = 1, ( n or 1 ) do
